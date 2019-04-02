@@ -5,12 +5,61 @@
 
 <!DOCTYPE html>
 <html>
-
   <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
 
   <body>
-    <p class="serif">This is a paragraph, shown in the Times New Roman font.</p>
+    <h1 id="page_title">CPU Scheduling Algorithms</h1>
+
+    <div id="FCFS">
+      <div class="big_title">FCFS</div>
+
+      <div class="column">
+        <table id="FCFS_table">
+          <tr id="table_title" class="table-row">
+            <th class="table_field">Process</th>
+            <th class="table_field">Burst Time</th>
+          </tr>
+          <tr class="table-row">
+            <td>P1</td>
+            <td id="1FCFS">2</td>
+          </tr>
+          <tr class="table-row">
+            <td>P2</td>
+            <td id="2FCFS">4</td>
+          </tr>
+          <tr class="table-row">
+            <td>P3</td>
+            <td id="3FCFS">1</td>
+          </tr>
+          <tr class="table-row">
+            <td>P4</td>
+            <td id="4FCFS">7</td>
+          </tr>
+          <tr class="table-row">
+            <td>P5</td>
+            <td id="5FCFS">4</td>
+          </tr>
+          <tr class="table-row">
+            <td>P6</td>
+            <td id="6FCFS">3</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="column">
+        <div class="one_value">
+          <div id="timer_title" class="title">Timer</div>
+          <div id="counter"></div>
+        </div>
+
+        <div class="one_value">
+          <div id="average_title" class="title">Average wait time</div>
+          <div id="average_time"></div>
+        </div>
+      </div>
+
+    </div>
   </body>
 </html>
