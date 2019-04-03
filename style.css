@@ -17,6 +17,10 @@
   clear: both;
 }
 
+#FCFS {
+  width: 15%;
+  margin-left: 6em;
+}
 #FCFS_table{
   margin-left: 6em;
   text-align: center;
