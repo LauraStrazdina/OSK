@@ -24,6 +24,7 @@
 #FCFS_table{
   margin-left: 6em;
   text-align: center;
+  width: 70%;
 }
 
 .table_field{
@@ -54,4 +55,13 @@
 
 .one_value{
   margin-bottom:2em;
+}
+
+#submit{
+  margin-top: 1em;
+  margin-left: 6em;
+}
+
+#plus_btn{
+  margin-bottom: 1em;
 }
