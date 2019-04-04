@@ -46,7 +46,7 @@ function addRow(e){
    row.appendChild(processNumber);
 
    var burstTime = document.createElement('td');
-   burstTime.className = "FCFS";
+   burstTime.id = "FCFSinput";
    row.appendChild(burstTime);
 
    var inputField = document.createElement('input');
@@ -71,4 +71,45 @@ function deleteRow(e){
     var lastRow = document.querySelector("tr.table-row:last-child");
     lastRow.setAttribute('style', 'border:1px solid red');
   }
+}
+
+
+document.getElementById('submit').addEventListener('click', paraditKubicinus);
+function paraditKubicinus(e){
+  pos_x = 100;
+  pos_y = 400;
+  var sleepTime = 2000;
+  ievaddati = document.querySelectorAll('.forCount');
+  ievaddati.forEach(function(item, index){
+    console.log(item.value);
+    var color = getRandomColor();
+
+  for (i =0; i<item.value; i++){
+    sleep(sleepTime).then(() => {
+      var kvadratins = document.createElement('div');
+      kvadratins.id='animate';
+      kvadratins.setAttribute('style', `background-color: ${color}`);
+      kvadratins.style.left= pos_x + 'px';
+      kvadratins.style.top= pos_y + 'px';
+      document.getElementById('drawelements').appendChild(kvadratins);
+      pos_x = pos_x + 50;
+      });
+      
+      sleepTime=sleepTime+1000;
+    }
+
+  });
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
