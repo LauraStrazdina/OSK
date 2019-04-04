@@ -31,3 +31,27 @@ submit.onclick = function(){
 };
 
 };
+
+document.getElementById('plus_btn').addEventListener('click', addRow);
+function addRow(e){
+  var currentRowNumber = document.getElementsByClassName("forCount").length + 1;
+   var row = document.createElement('tr');
+   row.className = 'table-row';
+   var processNumber = document.createElement('td');
+   processNumber.id = "FCFS";
+   processNumber.innerHTML= "P"+currentRowNumber;
+   row.appendChild(processNumber);
+
+   var burstTime = document.createElement('td');
+   burstTime.className = "FCFS";
+   row.appendChild(burstTime);
+
+   var inputField = document.createElement('input');
+   inputField.setAttribute('type', 'text');
+   inputField.className = 'forCount';
+   burstTime.appendChild(inputField);
+
+   document.getElementById("FCFS_table").appendChild(row);
+   var row2 = document.createElement('tr');
+
+}
