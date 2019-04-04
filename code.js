@@ -34,6 +34,9 @@ submit.onclick = function(){
 
 document.getElementById('plus_btn').addEventListener('click', addRow);
 function addRow(e){
+  var lastRow = document.querySelector("tr.table-row:last-child");
+  lastRow.setAttribute('style', 'border:none');
+
   var currentRowNumber = document.getElementsByClassName("forCount").length + 1;
    var row = document.createElement('tr');
    row.className = 'table-row';
@@ -54,4 +57,18 @@ function addRow(e){
    document.getElementById("FCFS_table").appendChild(row);
    var row2 = document.createElement('tr');
 
+}
+
+document.getElementById('minus_btn').addEventListener('click', deleteRow);
+function deleteRow(e){
+  var tableLength = document.querySelectorAll("tr.table-row").length;
+
+  if (tableLength>2){
+    var table = document.querySelectorAll("tr.table-row");
+    table[tableLength-1].remove();
+  }
+  else {
+    var lastRow = document.querySelector("tr.table-row:last-child");
+    lastRow.setAttribute('style', 'border:1px solid red');
+  }
 }
