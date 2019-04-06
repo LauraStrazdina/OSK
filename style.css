@@ -1,3 +1,7 @@
+body {
+  margin-bottom: 1em;
+}
+
 a {
   color: white;
 }
@@ -90,7 +94,7 @@ a:link {
   color: white;
   width: 14.5%;
   height: 2.8em;
-  padding-top: 0.4em;
+  padding-top: 0.6em;
   font-size: 1.2em;
   margin: 0 auto;
   display: block;
@@ -147,4 +151,42 @@ a:link {
   width: 50px;
   height: 50px;
   position: absolute;
+}
+
+#simulation {
+  display: none;
+}
+
+#simulation-info {
+  background-color: #e8e8e8;
+  border-style: solid;
+  border-radius: 1em;
+  margin-top: 15em;
+  margin-right: 7em;
+  margin-left: 7em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+#simulation-info h3 {
+  text-align: center;
+}
+
+.right-border {
+  border-right: solid;
+}
+
+#simulation-title h3 {
+  text-align: center;
+  margin-top: 1em;
+}
+
+#simulation-gantt .col {
+  border-style: solid;
+  border-radius: 1em;
+  margin-bottom: 7em;
+}
+
+#simulation-gantt h3 {
+  color: white;
 }

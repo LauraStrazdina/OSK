@@ -1,28 +1,38 @@
-//alert("Hello! I am an alert box!!");
-document.getElementById('fcfsAlgorithm').addEventListener('click', fcfsSelected);
-function fcfsSelected(e){
-  e.target.className='btn btn-warning btn-lg active';
+// disable & grey button
+function disable_button(id) {
+  document.getElementById(id).className = 'btn btn-secondary btn-lg disabled';
 }
 
-document.getElementById('sjfAlgorithm').addEventListener('click', sjfSelected);
-function sjfSelected(e){
-  e.target.className='btn btn-info btn-lg active';
+// disable & grey all buttons but return color for chosen one
+function alg_chosen(e) {
+  id = e.target.id
+  saved_class = e.target.className;
+  disable_button('fcfsAlgorithm');
+  disable_button('sjfAlgorithm');
+  disable_button('roundRobinAlgorithm');
+  disable_button('priorityAlgorithm');
+  document.getElementById(id).className = saved_class + ' disabled';
+
+  document.getElementById('createTable').className = 'btn btn-success';
+  document.getElementById('processNumberInput').disabled = false;
 }
 
-document.getElementById('roundRobinAlgorithm').addEventListener('click', robinSelected);
-function robinSelected(e){
-  e.target.className='btn btn-success btn-lg active';
-}
+document.getElementById('fcfsAlgorithm').addEventListener('click', alg_chosen);
+document.getElementById('sjfAlgorithm').addEventListener('click', alg_chosen);
+document.getElementById('roundRobinAlgorithm').addEventListener('click', alg_chosen);
+document.getElementById('priorityAlgorithm').addEventListener('click', alg_chosen);
 
-document.getElementById('priorityAlgorithm').addEventListener('click', prioritySelected);
-function prioritySelected(e){
-  e.target.className='btn btn-danger btn-lg active';
-}
+
+
+
 
 document.getElementById('createTable').addEventListener('click', createTable);
 function createTable(e){
   var processNumber = document.getElementById('processNumberInput').value;
   if (processNumber !== ""){
+    e.target.className = e.target.className + ' disabled';
+    document.getElementById('processNumberInput').disabled = true;
+
     document.getElementById('processNumberInput').setAttribute('style', 'border:border:1px solid black');
     var tableColumn = document.getElementById("tableColumn");
     var table = document.createElement('table');
@@ -40,11 +50,11 @@ function createTable(e){
     th2.innerText = "Burst Time";
     tr.appendChild(th);
     tr.appendChild(th2);
-    var simulateBtn =  document.createElement('input');
+    var simulateBtn =  document.createElement('a');
     simulateBtn.className = "btn btn-warning";
-    simulateBtn.setAttribute('type', 'submit');
+    simulateBtn.setAttribute('href', '#simulation');
     simulateBtn.id = 'submit';
-    simulateBtn.setAttribute('value', 'Simulate');
+    simulateBtn.innerHTML = 'Simulate';
 
     for (i=1; i<=processNumber; i++){
       var row = document.createElement('tr');
@@ -63,13 +73,17 @@ function createTable(e){
       table.appendChild(row);
     }
     tableColumn.appendChild(simulateBtn);
+    document.getElementById('submit').addEventListener('click', startSimulation);
   }
   else {
     document.getElementById('processNumberInput').setAttribute('style', 'border:1px solid red');
   }
 }
 
-
+function startSimulation(e){
+  document.getElementById('simulation').style.display = 'block'
+  // do simulation here
+}
 
 
 
