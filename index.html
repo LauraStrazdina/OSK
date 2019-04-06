@@ -10,33 +10,43 @@
   </head>
 
   <body>
-    <h1 id="page_title">CPU Scheduling Algorithms</h1>
 
-    <div id="FCFS">
-            <label><strong>Algorithm:</strong></label>
-            <select class="form-control" id="sel1">
-              <option>FCFS</option>
-              <option>SJF</option>
-              <option>Round robin</option>
-              <option>Priority</option>
-            </select>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1 id="page_title">CPU Scheduling Algorithms</h1>
+          <img id="mainImage"src="process.png">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3 id="chooseAlgorithm">Choose Algorithm</h1>
+          <div id="chooseAlgorithmButtons">
+            <a href="#processNumberInput" id="fcfsAlgorithm" class="btn btn-warning btn-lg" role="button">FCFS</a>
+            <a href="#processNumberInput" id="sjfAlgorithm" class="btn btn-info btn-lg" role="button">SJF</a>
+            <a href="#processNumberInput" id="roundRobinAlgorithm" class="btn btn-success btn-lg" role="button">Round robin</a>
+            <a href="#processNumberInput" id="priorityAlgorithm" class="btn btn-danger btn-lg" role="button">Priority</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3 id="processNumber">Enter number of processes: <input id="processNumberInput" type="text"></input> </h1>
+
+          <a href="#table_title" id="createTable" class="btn btn-success" role="button">Create table</a>
+        </div>
+      </div>
+      <div class="row">
+        <div id="tableColumn" class="column">
+        </div>
+      </div>
     </div>
 
-      <div class="column">
-        <table id="FCFS_table">
-          <tr id="table_title" class="table-row">
-            <th class="table_field">Process</th>
-            <th class="table_field">Burst Time</th>
-          </tr>
-          <tr class="table-row">
-            <td id="FCFS">P1</td>
-            <td id="FCFS"><input type="text" class ="forCount"></td>
-          </tr>
-        </table>
 
-        <input class="btn btn-outline-secondary" type="submit" id="submit" value="Submit">
 
-      </div>
+
+
+
 
 
       <div class="column">
@@ -51,6 +61,11 @@
           <div id="average_title" class="title">Average wait time</div>
           <div id="average_time"></div>
         </div>
+      </div>
+
+
+      <div id="drawelements">
+
       </div>
 
 
