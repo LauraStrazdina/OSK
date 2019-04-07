@@ -191,11 +191,11 @@ function fcfsAlgorithm(burstArray){
 	      // kvadratins.style.top= pos_y + 'px';
 	      // document.getElementById('drawelements').appendChild(kvadratins);
 	      // pos_x = pos_x + 50;
-	      });
-	      sleepTime=sleepTime+1000;
-	    }
-	  });
-  }
+      });
+      sleepTime=sleepTime+1000;
+    }
+  });
+}
   // var processArr = [];
   // var burstArr = [];
   // for (var key in burstHash) {
@@ -226,21 +226,21 @@ function sjfAlgorithm(burstArray){
 
   array.forEach(function(item, index){
     arrayValues.push(item.value);
-    });
+  });
 
   array3 = arrayValues.sort()
 
   array3.forEach(function(item, index){
-	    console.log(item);
-	    var color = getRandomColor();
+    console.log(item);
+    var color = getRandomColor();
 
 	  for (i =0; i<item; i++){
 	    sleep(sleepTime).then(() => {
         showCube(item, color)
-	      });
-	      sleepTime=sleepTime+1000;
-	    }
-	  });
+      });
+      sleepTime=sleepTime+1000;
+    }
+  });
 }
 
 function roundRobinAlgorithm(burstHash){
