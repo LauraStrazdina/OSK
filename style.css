@@ -148,9 +148,13 @@ a:link {
 }
 
 #animate {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 80px;
+  border-radius: 1em;
   position: absolute;
+  text-align: center;
+  line-height: 80px;
+  text-shadow: #ffffff 0 0 2px;
 }
 
 #simulation {

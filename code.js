@@ -1,26 +1,30 @@
 // disable & grey button
-function disable_button(id) {
+var chosenAlgorithm = "";
+
+function disableButton(id) {
   document.getElementById(id).className = 'btn btn-secondary btn-lg disabled';
 }
 
 // disable & grey all buttons but return color for chosen one
-function alg_chosen(e) {
+function algChosen(e) {
   id = e.target.id
-  saved_class = e.target.className;
-  disable_button('fcfsAlgorithm');
-  disable_button('sjfAlgorithm');
-  disable_button('roundRobinAlgorithm');
-  disable_button('priorityAlgorithm');
-  document.getElementById(id).className = saved_class + ' disabled';
+  savedClass = e.target.className;
+  disableButton('fcfsAlgorithm');
+  disableButton('sjfAlgorithm');
+  disableButton('roundRobinAlgorithm');
+  disableButton('priorityAlgorithm');
+  document.getElementById(id).className = savedClass + ' disabled';
 
   document.getElementById('createTable').className = 'btn btn-success';
   document.getElementById('processNumberInput').disabled = false;
+
+  chosenAlgorithm = id;
 }
 
-document.getElementById('fcfsAlgorithm').addEventListener('click', alg_chosen);
-document.getElementById('sjfAlgorithm').addEventListener('click', alg_chosen);
-document.getElementById('roundRobinAlgorithm').addEventListener('click', alg_chosen);
-document.getElementById('priorityAlgorithm').addEventListener('click', alg_chosen);
+document.getElementById('fcfsAlgorithm').addEventListener('click', algChosen);
+document.getElementById('sjfAlgorithm').addEventListener('click', algChosen);
+document.getElementById('roundRobinAlgorithm').addEventListener('click', algChosen);
+document.getElementById('priorityAlgorithm').addEventListener('click', algChosen);
 
 
 
@@ -79,15 +83,6 @@ function createTable(e){
     document.getElementById('processNumberInput').setAttribute('style', 'border:1px solid red');
   }
 }
-
-function startSimulation(e){
-  document.getElementById('simulation').style.display = 'block'
-  // do simulation here
-}
-
-
-
-
 
 
 // window.onload = function what(){
@@ -163,9 +158,94 @@ function startSimulation(e){
 //     lastRow.setAttribute('style', 'border:1px solid red');
 //   }
 // }
-//
-//
-// document.getElementById('submit').addEventListener('click', paraditKubicinus);
+
+function startSimulation(e){
+  document.getElementById('simulation').style.display = 'block'
+  // $("body").css("overflow", "hidden");
+  burstHash = getProcessBursts();
+  if (chosenAlgorithm == "fcfsAlgorithm"){fcfsAlgorithm(burstHash)}
+  else if (chosenAlgorithm == "sjfAlgorithm"){sjfAlgorithm(burstHash)}
+  else if (chosenAlgorithm == "roundRobinAlgorithm"){roundRobinAlgorithm(burstHash)}
+  else if (chosenAlgorithm == "priorityAlgorithm"){priorityAlgorithm(burstHash)}
+  else {console.log("BAD ALGORITHM:", chosenAlgorithm)}
+}
+
+function showMultipleCubes(text, color, amount) {
+
+}
+
+function fcfsAlgorithm(burstHash){
+  console.log("Starting fcfsAlgorithm");
+  // var processArr = [];
+  // var burstArr = [];
+  // for (var key in burstHash) {
+  //   processArr.push(key);
+  //   burstArr.push(burstHash[key]);
+  // }
+  //
+  // console.log(processArr)
+  // var sleepTime = 2000
+  // for (i = 0; i < processArr.length; i++){
+  //   sleep(sleepTime).then(() => {
+  //     console.log(i, processArr[i])
+  //     showCube(processArr[i], getRandomColor())
+  //   });
+  //   sleepTime = sleepTime + 1000
+  //   console.log("in loop")
+  // }
+  // console.log("finished)")
+}
+
+function sjfAlgorithm(burstHash){
+  console.log("Starting sjfAlgorithm");
+}
+
+function roundRobinAlgorithm(burstHash){
+  console.log("Starting roundRobinAlgorithm");
+}
+
+function priorityAlgorithm(burstHash){
+  console.log("Starting priorityAlgorithm");
+}
+
+function getProcessBursts(){
+  burstHash = {}
+  input = document.querySelectorAll('.forCount');
+  input.forEach(function(item,index){
+    burstHash["P"+(index+1)] = item.value;
+  });
+  console.log("Process hash:",burstHash);
+  return burstHash;
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+var gap = 0
+function showCube(text, color){
+  posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + 4 + gap;
+  posY = window.scrollY + document.getElementById('simulation-gantt').getBoundingClientRect().top + 4;
+  cube = document.createElement('div');
+  cube.id='animate';
+  cube.setAttribute('style', `background-color: ${color}`);
+  cube.innerHTML = text;
+  cube.style.left= posX + 'px';
+  cube.style.top= posY + 'px';
+  document.getElementById('simulation-gantt').appendChild(cube);
+  gap = gap + 40;
+}
+
+
 // function paraditKubicinus(e){
 //   pos_x = 100;
 //   pos_y = 400;
@@ -175,32 +255,23 @@ function startSimulation(e){
 //     console.log(item.value);
 //     var color = getRandomColor();
 //
-//   for (i =0; i<item.value; i++){
-//     sleep(sleepTime).then(() => {
-//       var kvadratins = document.createElement('div');
-//       kvadratins.id='animate';
-//       kvadratins.setAttribute('style', `background-color: ${color}`);
-//       kvadratins.style.left= pos_x + 'px';
-//       kvadratins.style.top= pos_y + 'px';
-//       document.getElementById('drawelements').appendChild(kvadratins);
-//       pos_x = pos_x + 50;
-//       });
-//
+//     for (i =0; i<item.value; i++){
+//       sleep(sleepTime).then(() => {
+//         var kvadratins = document.createElement('div');
+//         kvadratins.id='animate';
+//         kvadratins.setAttribute('style', `background-color: ${color}`);
+//         kvadratins.style.left= pos_x + 'px';
+//         kvadratins.style.top= pos_y + 'px';
+//         document.getElementById('simulation-gantt').appendChild(kvadratins);
+//         pos_x = pos_x + 50;
+//         });
 //       sleepTime=sleepTime+1000;
 //     }
-//
 //   });
 // }
+
+// stop scrolling
+// $("body").css("overflow", "hidden");
 //
-// function getRandomColor() {
-//   var letters = '0123456789ABCDEF';
-//   var color = '#';
-//   for (var i = 0; i < 6; i++) {
-//     color += letters[Math.floor(Math.random() * 16)];
-//   }
-//   return color;
-// }
-//
-// function sleep (time) {
-//   return new Promise((resolve) => setTimeout(resolve, time));
-// }
+// get coordinates
+// window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left
