@@ -162,9 +162,9 @@ function createTable(e){
 function startSimulation(e){
   document.getElementById('simulation').style.display = 'block'
   // $("body").css("overflow", "hidden");
-  burstHash = getProcessBursts();
-  if (chosenAlgorithm == "fcfsAlgorithm"){fcfsAlgorithm(burstHash)}
-  else if (chosenAlgorithm == "sjfAlgorithm"){sjfAlgorithm(burstHash)}
+  burstArray = getProcessArray();
+  if (chosenAlgorithm == "fcfsAlgorithm"){fcfsAlgorithm(burstArray)}
+  else if (chosenAlgorithm == "sjfAlgorithm"){sjfAlgorithm(burstArray)}
   else if (chosenAlgorithm == "roundRobinAlgorithm"){roundRobinAlgorithm(burstHash)}
   else if (chosenAlgorithm == "priorityAlgorithm"){priorityAlgorithm(burstHash)}
   else {console.log("BAD ALGORITHM:", chosenAlgorithm)}
@@ -174,8 +174,28 @@ function showMultipleCubes(text, color, amount) {
 
 }
 
-function fcfsAlgorithm(burstHash){
-  console.log("Starting fcfsAlgorithm");
+function fcfsAlgorithm(burstArray){
+  console.log(burstArray);
+  var sleepTime = 2000
+  burstArray.forEach(function(item, index){
+	    console.log(item.value);
+	    var color = getRandomColor();
+
+	  for (i =0; i<item.value; i++){
+	    sleep(sleepTime).then(() => {
+        showCube(item.parentElement.previousSibling.innerHTML, color)
+	      // var kvadratins = document.createElement('div');
+	      // kvadratins.id='animate';
+	      // kvadratins.setAttribute('style', `background-color: ${color}`);
+	      // kvadratins.style.left= pos_x + 'px';
+	      // kvadratins.style.top= pos_y + 'px';
+	      // document.getElementById('drawelements').appendChild(kvadratins);
+	      // pos_x = pos_x + 50;
+	      });
+	      sleepTime=sleepTime+1000;
+	    }
+	  });
+  }
   // var processArr = [];
   // var burstArr = [];
   // for (var key in burstHash) {
@@ -194,10 +214,33 @@ function fcfsAlgorithm(burstHash){
   //   console.log("in loop")
   // }
   // console.log("finished)")
-}
 
-function sjfAlgorithm(burstHash){
+
+function sjfAlgorithm(burstArray){
   console.log("Starting sjfAlgorithm");
+  var processNameArray = [];
+
+  var array = Array.from(burstArray);
+  var arrayValues = [];
+  var sleepTime = 2000;
+
+  array.forEach(function(item, index){
+    arrayValues.push(item.value);
+    });
+
+  array3 = arrayValues.sort()
+
+  array3.forEach(function(item, index){
+	    console.log(item);
+	    var color = getRandomColor();
+
+	  for (i =0; i<item; i++){
+	    sleep(sleepTime).then(() => {
+        showCube(item, color)
+	      });
+	      sleepTime=sleepTime+1000;
+	    }
+	  });
 }
 
 function roundRobinAlgorithm(burstHash){
@@ -206,6 +249,11 @@ function roundRobinAlgorithm(burstHash){
 
 function priorityAlgorithm(burstHash){
   console.log("Starting priorityAlgorithm");
+}
+
+function getProcessArray(){
+  var burstArray = document.querySelectorAll('.forCount');
+   return burstArray;
 }
 
 function getProcessBursts(){
