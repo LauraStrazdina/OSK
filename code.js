@@ -170,51 +170,21 @@ function startSimulation(e){
   else {console.log("BAD ALGORITHM:", chosenAlgorithm)}
 }
 
-function showMultipleCubes(text, color, amount) {
-
-}
-
 function fcfsAlgorithm(burstArray){
-  console.log(burstArray);
   var sleepTime = 2000
   burstArray.forEach(function(item, index){
-	    console.log(item.value);
 	    var color = getRandomColor();
 
 	  for (i =0; i<item.value; i++){
 	    sleep(sleepTime).then(() => {
         showCube(item.parentElement.previousSibling.innerHTML, color)
-	      // var kvadratins = document.createElement('div');
-	      // kvadratins.id='animate';
-	      // kvadratins.setAttribute('style', `background-color: ${color}`);
-	      // kvadratins.style.left= pos_x + 'px';
-	      // kvadratins.style.top= pos_y + 'px';
-	      // document.getElementById('drawelements').appendChild(kvadratins);
-	      // pos_x = pos_x + 50;
       });
       sleepTime=sleepTime+1000;
     }
   });
-}
-  // var processArr = [];
-  // var burstArr = [];
-  // for (var key in burstHash) {
-  //   processArr.push(key);
-  //   burstArr.push(burstHash[key]);
-  // }
-  //
-  // console.log(processArr)
-  // var sleepTime = 2000
-  // for (i = 0; i < processArr.length; i++){
-  //   sleep(sleepTime).then(() => {
-  //     console.log(i, processArr[i])
-  //     showCube(processArr[i], getRandomColor())
-  //   });
-  //   sleepTime = sleepTime + 1000
-  //   console.log("in loop")
-  // }
-  // console.log("finished)")
 
+  showAllTimesFromNodes(burstArray, sleepTime);
+}
 
 function sjfAlgorithm(burstArray){
   console.log("Starting sjfAlgorithm");
@@ -225,22 +195,26 @@ function sjfAlgorithm(burstArray){
   var sleepTime = 2000;
 
   array.forEach(function(item, index){
-    arrayValues.push(item.value);
+    arrayValues.push({
+      proc: item.parentElement.previousSibling.innerHTML,
+      burst: item.value
+    });
   });
 
-  array3 = arrayValues.sort()
+  array3 = getSorted(arrayValues);
 
   array3.forEach(function(item, index){
-    console.log(item);
     var color = getRandomColor();
 
-	  for (i =0; i<item; i++){
+	  for (i =0; i<item["burst"]; i++){
 	    sleep(sleepTime).then(() => {
-        showCube(item, color)
+        showCube(item["proc"], color)
       });
       sleepTime=sleepTime+1000;
     }
   });
+
+  showAllTimesFromArray(array3, sleepTime);
 }
 
 function roundRobinAlgorithm(burstHash){
@@ -292,6 +266,62 @@ function showCube(text, color){
   document.getElementById('simulation-gantt').appendChild(cube);
   gap = gap + 40;
 }
+
+var gap2 = 0
+function showTime(text){
+  posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + gap2 - 16;
+  posY = window.scrollY + document.getElementById('simulation-gantt').getBoundingClientRect().top + 64;
+  number = document.createElement('div');
+  number.id='animate';
+  // number.setAttribute('style', `background-color: ${color}`);
+  number.innerHTML = text;
+  number.style.left= posX + 'px';
+  number.style.top= posY + 'px';
+  document.getElementById('simulation-gantt').appendChild(number);
+  gap2 = gap2 + 40;
+}
+
+function skipTime(){
+  gap2 = gap2 + 40;
+}
+
+function showAllTimesFromNodes(burstArray, sleepTime){
+  sleep(sleepTime).then(() => {
+    showTime(0);
+    var counter = 0;
+    burstArray.forEach(function(item, index){
+      value = parseInt(item.value)
+      for (i=0; i<(value-1); i++){
+        skipTime();
+      }
+      counter = counter + value;
+      showTime(counter);
+    });
+  });
+}
+
+function showAllTimesFromArray(array, sleepTime){
+  sleep(sleepTime).then(() => {
+    showTime(0);
+    var counter = 0;
+    array.forEach(function(item, index){
+      value = parseInt(item["burst"])
+      for (i=0; i<(value-1); i++){
+        skipTime();
+      }
+      counter = counter + value;
+      showTime(counter);
+    });
+  });
+}
+
+function getSorted(array){
+  var sorted = array.sort(function(a, b) {
+    return (a["burst"] > b["burst"]) ? 1 : ((b["burst"] > a["burst"]) ? -1 : 0)
+  });
+  return sorted
+}
+
 
 
 // function paraditKubicinus(e){
