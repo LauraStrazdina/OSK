@@ -148,7 +148,7 @@ a:link {
 }
 
 #animate {
-  width: 40px;
+  /* width: 30px; */
   height: 80px;
   border-radius: 1em;
   position: absolute;
