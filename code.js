@@ -195,10 +195,10 @@ function startSimulation(e){
   // $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
   burstArray = getProcessArray();
 
-  // Change
+  // Change cube width and sleep duration if too many bursts
   burstSum = 0;
   Array.from(burstArray).forEach(function(item, index){burstSum+=parseInt(item.value)});
-  if (burstSum > 15) {
+  if (burstSum > 15 && burstSum <= 30) {
     cubeWidth = 30;
     sleepDuration = 0.5;
   }
