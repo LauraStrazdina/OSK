@@ -192,8 +192,9 @@ function createTable(e){
 
 function startSimulation(e){
   document.getElementById('simulation').style.display = 'block'
-  // $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
+  $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
   burstArray = getProcessArray();
+  displayProcesses(burstArray);
 
   // Change cube width and sleep duration if too many bursts
   burstSum = 0;
@@ -228,6 +229,18 @@ function fcfsAlgorithm(burstArray){
   });
 
   showAllTimes1(burstArray, sleepTime);
+}
+
+function displayProcesses(burstArray) {
+  burstArray.forEach(function(item, index){
+    text = item.parentElement.previousSibling.innerHTML;
+    value = item.value;
+    info = document.createElement('h3');
+    info.id='process';
+    // cube.setAttribute('style', `background-color: ${color}; width: ${cubeWidth}px`);
+    info.innerHTML = `${text} - ${value} bursts`;
+    document.getElementById('processes').appendChild(info);
+  });
 }
 
 function sjfAlgorithm(burstArray){
