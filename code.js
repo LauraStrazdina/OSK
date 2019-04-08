@@ -32,6 +32,16 @@ document.getElementById('priorityAlgorithm').addEventListener('click', algChosen
 
 document.getElementById('createTable').addEventListener('click', createTable);
 function createTable(e){
+  if (chosenAlgorithm == "roundRobinAlgorithm"){
+    var enterTimeQuantum = document.createElement('h3');
+    enterTimeQuantum.id = "enterTimeQuantum";
+    enterTimeQuantum.innerText = "Enter time quantum: ";
+    var inputTimeQuantum = document.createElement('input');
+    inputTimeQuantum.id = "inputTimeQuantum";
+    inputTimeQuantum.setAttribute('type', 'text');
+    enterTimeQuantum.appendChild(inputTimeQuantum);
+    document.getElementById('timeQuantum').appendChild(enterTimeQuantum);
+  }
   var processNumber = document.getElementById('processNumberInput').value;
   if (processNumber !== ""){
     e.target.className = e.target.className + ' disabled';
@@ -60,6 +70,14 @@ function createTable(e){
     simulateBtn.id = 'submit';
     simulateBtn.innerHTML = 'Simulate';
 
+    if (chosenAlgorithm == "priorityAlgorithm"){
+      var th3 = document.createElement('th');
+      th3.className = "table_field";
+      th3.innerText = "Priority";
+      tr.appendChild(th3);
+
+    }
+
     for (i=1; i<=processNumber; i++){
       var row = document.createElement('tr');
       row.className = 'table-row';
@@ -75,6 +93,17 @@ function createTable(e){
       inputField.className = 'forCount';
       burstTime.appendChild(inputField);
       table.appendChild(row);
+      if (chosenAlgorithm == "priorityAlgorithm"){
+      row.className = 'table-row';
+      var processPriority = document.createElement('td');
+      processPriority.id = "processPriority";
+      row.appendChild(processPriority);
+      var inputPriority = document.createElement('input');
+      inputPriority.setAttribute('type', 'text');
+      inputPriority.id = 'inputPriority';
+      processPriority.appendChild(inputPriority);
+      table.appendChild(row);
+    }
     }
     tableColumn.appendChild(simulateBtn);
     document.getElementById('submit').addEventListener('click', startSimulation);

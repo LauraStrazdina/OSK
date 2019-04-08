@@ -25,13 +25,13 @@ a {
    word-spacing:10px;
 }
 
-#processNumber{
+#processNumber, #enterTimeQuantum{
   margin-top: 5em;
   text-align: center;
 }
 
 
-#processNumberInput{
+#processNumberInput, #inputTimeQuantum{
   width: 5em;
   text-align: center;
 }
