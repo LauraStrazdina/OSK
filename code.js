@@ -123,7 +123,7 @@ function createTable(e){
 // submit.onclick = function(){
 //
 //   var counter = document.getElementById('counter');
-//   var average_time = document.getElementById('average_time');
+//   var averageTime = document.getElementById('average-time');
 //   var FCFS = document.getElementsByClassName('forCount');
 //
 //
@@ -135,7 +135,7 @@ function createTable(e){
 //
 //
 //
-//   average_time.innerHTML = sum/FCFS.length;
+//   averageTime.innerHTML = sum/FCFS.length;
 //
 //   var number = 0;
 //   var interval = setInterval(() =>  {
@@ -272,6 +272,7 @@ function roundRobinAlgorithm(burstArray){
   var sleepTime = 2000 * sleepDuration;
 
   var arrayValues = [];
+  var processes = [];
   array.forEach(function(item, index){
     arrayValues.push({
       proc: item.parentElement.previousSibling.innerHTML,
@@ -283,7 +284,7 @@ function roundRobinAlgorithm(burstArray){
   var resultArray = [];
 
   counter = roundRobinHelper3(arrayValues, timeQuantum) + 1;
-  console.log("BEGIN, COUNTER: ", counter);
+  processes = arrayValues.slice();
   while (counter > 1){
     roundRobinHelper1(arrayValues, timeQuantum).forEach(function(item, index){resultArray.push(item)});
     arrayValues = roundRobinHelper2(arrayValues, timeQuantum);
@@ -298,8 +299,7 @@ function roundRobinAlgorithm(burstArray){
       sleepTime = sleepTime + (1000 * sleepDuration);
     }
   });
-
-  showAllTimes2(resultArray, sleepTime);
+  showAllTimes3(processes, resultArray, sleepTime);
 }
 
 function roundRobinHelper1(array, timeQuantum){
@@ -311,7 +311,6 @@ function roundRobinHelper1(array, timeQuantum){
         burst: timeQuantum,
         color: item['color']
       });
-      console.log(item);
     }
     else {
       resultArr.push({
@@ -343,8 +342,6 @@ function roundRobinHelper3(array, timeQuantum){
   array.forEach(function(item, index){
     if (item['burst'] > biggestBurst) {biggestBurst = item['burst']}
   });
-  console.log(biggestBurst);
-  console.log(biggestBurst / timeQuantum);
   return biggestBurst / timeQuantum
 }
 
@@ -389,7 +386,6 @@ function getProcessBursts(){
   input.forEach(function(item,index){
     burstHash["P"+(index+1)] = item.value;
   });
-  console.log("Process hash:",burstHash);
   return burstHash;
 }
 
@@ -443,7 +439,7 @@ function skipTime(){
   gap2 = gap2 + cubeWidth;
 }
 
-var average_time = document.getElementById('average_time');
+var averageTime = document.getElementById('average-time');
 
 function showAllTimes1(burstArray, sleepTime){
   sleep(sleepTime).then(() => {
@@ -457,7 +453,7 @@ function showAllTimes1(burstArray, sleepTime){
       counter = counter + value;
       showTime(counter);
     });
-    average_time.innerHTML=counter/burstArray.length;
+    averageTime.innerHTML=counter/burstArray.length;
   });
 }
 
@@ -473,8 +469,49 @@ function showAllTimes2(array, sleepTime){
       count = count + value;
       showTime(count);
     });
-    average_time.innerHTML=count/burstArray.length;
+    averageTime.innerHTML=count/burstArray.length;
   });
+}
+
+var processesArr = []
+function showAllTimes3(processes, array, sleepTime){
+  processesArr = processes.slice();
+  processesArr.forEach(function(item, index){
+    item['counter'] = 0;
+    console.log(item);
+  });
+
+  sleep(sleepTime).then(() => {
+    showTime(0);
+    var count = 0;
+    array.forEach(function(item, index){
+      value = parseInt(item["burst"])
+      for (i=0; i<(value-1); i++){
+        skipTime();
+      }
+      count = count + value;
+      addCount(item, count);
+      showTime(count);
+    });
+    averageTime.innerHTML = calculateAverageTime();
+  });
+}
+
+function addCount(item, count) {
+  processesArr.forEach(function(proc, index){
+    if (proc['proc'] == item['proc']) {
+      proc['counter'] = count;
+    }
+  });
+}
+
+function calculateAverageTime() {
+  bursts = getProcessArray();
+  var sum = 0;
+  processesArr.forEach(function(item, index){
+    sum += (item['counter'] - bursts[index].value);
+  });
+  return (sum / processesArr.length);
 }
 
 var avtSum = 0;
@@ -491,7 +528,7 @@ function showAllTimes4(array, sleepTime){
       counter = counter + value;
       showTime(counter);
     });
-    average_time.innerHTML=avtSum/array.length;
+    averageTime.innerHTML=avtSum/array.length;
   });
 }
 
