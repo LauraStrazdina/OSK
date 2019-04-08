@@ -327,6 +327,8 @@ function sleep (time) {
 }
 
 var gap = 0
+var counter = document.getElementById('counter');
+var counterNr = 0
 function showCube(text, color){
 
   posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + 4 + gap;
@@ -339,6 +341,8 @@ function showCube(text, color){
   cube.style.top= posY + 'px';
   document.getElementById('simulation-gantt').appendChild(cube);
   gap = gap + cubeWidth;
+  counter.innerHTML = counterNr+1;
+  counterNr++;
 }
 
 var gap2 = 0
@@ -359,6 +363,8 @@ function skipTime(){
   gap2 = gap2 + cubeWidth;
 }
 
+var average_time = document.getElementById('average_time');
+
 function showAllTimes1(burstArray, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
@@ -371,6 +377,7 @@ function showAllTimes1(burstArray, sleepTime){
       counter = counter + value;
       showTime(counter);
     });
+    average_time.innerHTML=counter/burstArray.length;
   });
 }
 
@@ -389,6 +396,7 @@ function showAllTimes2(array, sleepTime){
   });
 }
 
+var avtSum = 0;
 function showAllTimes4(array, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
@@ -398,9 +406,11 @@ function showAllTimes4(array, sleepTime){
       for (i=0; i<(value-1); i++){
         skipTime();
       }
+      avtSum = avtSum+counter;
       counter = counter + value;
       showTime(counter);
     });
+    average_time.innerHTML=avtSum/array.length;
   });
 }
 
