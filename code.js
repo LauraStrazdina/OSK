@@ -1,5 +1,7 @@
 // disable & grey button
 var chosenAlgorithm = "";
+var cubeWidth = 40; //default 40
+var sleepDuration = 1; //default 1
 
 function disableButton(id) {
   document.getElementById(id).className = 'btn btn-secondary btn-lg disabled';
@@ -190,17 +192,30 @@ function createTable(e){
 
 function startSimulation(e){
   document.getElementById('simulation').style.display = 'block'
-  // $("body").css("overflow", "hidden");
+  // $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
   burstArray = getProcessArray();
+
+  // Change
+  burstSum = 0;
+  Array.from(burstArray).forEach(function(item, index){burstSum+=parseInt(item.value)});
+  if (burstSum > 15) {
+    cubeWidth = 30;
+    sleepDuration = 0.5;
+  }
+  else if (burstSum > 30) {
+    cubeWidth = 20;
+    sleepDuration = 0.25;
+  }
+
   if (chosenAlgorithm == "fcfsAlgorithm"){fcfsAlgorithm(burstArray)}
   else if (chosenAlgorithm == "sjfAlgorithm"){sjfAlgorithm(burstArray)}
-  else if (chosenAlgorithm == "roundRobinAlgorithm"){roundRobinAlgorithm(burstHash)}
+  else if (chosenAlgorithm == "roundRobinAlgorithm"){roundRobinAlgorithm(burstArray)}
   else if (chosenAlgorithm == "priorityAlgorithm"){priorityAlgorithm()}
   else {console.log("BAD ALGORITHM:", chosenAlgorithm)}
 }
 
 function fcfsAlgorithm(burstArray){
-  var sleepTime = 2000
+  var sleepTime = 2000 * sleepDuration
   burstArray.forEach(function(item, index){
 	    var color = getRandomColor();
 
@@ -208,11 +223,11 @@ function fcfsAlgorithm(burstArray){
 	    sleep(sleepTime).then(() => {
         showCube(item.parentElement.previousSibling.innerHTML, color)
       });
-      sleepTime=sleepTime+1000;
+      sleepTime = sleepTime + (1000 * sleepDuration);
     }
   });
 
-  showAllTimesFromNodes(burstArray, sleepTime);
+  showAllTimes1(burstArray, sleepTime);
 }
 
 function sjfAlgorithm(burstArray){
@@ -221,7 +236,7 @@ function sjfAlgorithm(burstArray){
 
   var array = Array.from(burstArray);
   var arrayValues = [];
-  var sleepTime = 2000;
+  var sleepTime = 2000 * sleepDuration;
 
   array.forEach(function(item, index){
     arrayValues.push({
@@ -239,11 +254,12 @@ function sjfAlgorithm(burstArray){
 	    sleep(sleepTime).then(() => {
         showCube(item["proc"], color)
       });
-      sleepTime=sleepTime+1000;
+      sleepTime = sleepTime + (1000 * sleepDuration);
     }
   });
 
-  showAllTimesFromArray(array3, sleepTime);
+  console.log(array3);
+  showAllTimes2(array3, sleepTime);
 }
 
 
@@ -253,45 +269,33 @@ function roundRobinAlgorithm(burstHash){
 }
 
 function priorityAlgorithm(){
-
   console.log("Starting priorityAlgorithm");
   var priorities = document.querySelectorAll('#inputPriority');
-  var prioritiesArray = []
-  sleepTime = 1000;
+  var prioritiesArray = [];
+  var resultArray = [];
+  sleepTime = 1000 * sleepDuration;
 
   priorities.forEach(function(item, index){
     prioritiesArray.push(item.value);
   });
 
   var maxPrioritiesValue = Math.max.apply(null, prioritiesArray);
-  //console.log(maxPrioritiesValue);
+  for (i= 0; i<maxPrioritiesValue+1; i++){
+    priorities.forEach(function(item, index){
+      var color = getRandomColor();
 
-// for (i=0; i<maxPrioritiesValue+1; i++){
-//   var sleepTime = 2000
-//   priorities.forEach(function(item, index){
-//     var color = getRandomColor();
-//       if (i==item.value) {
-//         for (x=1; x<=item.parentElement.previousSibling.firstChild.value; x++){
-//           showCube(item.parentElement.previousSibling.previousSibling.innerHTML, color)
-//         }
-//       }
-//     });
-//   };
-for (i= 0; i<maxPrioritiesValue+1; i++){
-priorities.forEach(function(item, index){
-    var color = getRandomColor();
-
-    if (i==item.value){
-      for (x=1; x<=item.parentElement.previousSibling.firstChild.value; x++){
-        sleep(sleepTime).then(() => {
-          showCube(item.parentElement.previousSibling.previousSibling.innerHTML, color)
-        });
-        sleepTime=sleepTime+1000;
+      if (i==item.value){
+        resultArray.push(item.parentElement.previousSibling.firstChild.value);
+        for (x=1; x<=item.parentElement.previousSibling.firstChild.value; x++){
+          sleep(sleepTime).then(() => {
+            showCube(item.parentElement.previousSibling.previousSibling.innerHTML, color);
+          });
+          sleepTime = sleepTime + (1000 * sleepDuration);
+        }
       }
-    }
-  });
-};
-
+    });
+  };
+  showAllTimes4(resultArray, sleepTime);
 }
 
 function getProcessArray(){
@@ -329,33 +333,33 @@ function showCube(text, color){
   posY = window.scrollY + document.getElementById('simulation-gantt').getBoundingClientRect().top + 4;
   cube = document.createElement('div');
   cube.id='animate';
-  cube.setAttribute('style', `background-color: ${color}`);
+  cube.setAttribute('style', `background-color: ${color}; width: ${cubeWidth}px`);
   cube.innerHTML = text;
   cube.style.left= posX + 'px';
   cube.style.top= posY + 'px';
   document.getElementById('simulation-gantt').appendChild(cube);
-  gap = gap + 40;
+  gap = gap + cubeWidth;
 }
 
 var gap2 = 0
 function showTime(text){
-  posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + gap2 - 16;
+  posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + gap2 + 4 - (cubeWidth/2);
   posY = window.scrollY + document.getElementById('simulation-gantt').getBoundingClientRect().top + 64;
   number = document.createElement('div');
   number.id='animate';
-  // number.setAttribute('style', `background-color: ${color}`);
+  number.setAttribute('style', `width: ${cubeWidth}px`);
   number.innerHTML = text;
   number.style.left= posX + 'px';
   number.style.top= posY + 'px';
   document.getElementById('simulation-gantt').appendChild(number);
-  gap2 = gap2 + 40;
+  gap2 = gap2 + cubeWidth;
 }
 
 function skipTime(){
-  gap2 = gap2 + 40;
+  gap2 = gap2 + cubeWidth;
 }
 
-function showAllTimesFromNodes(burstArray, sleepTime){
+function showAllTimes1(burstArray, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
     var counter = 0;
@@ -370,12 +374,27 @@ function showAllTimesFromNodes(burstArray, sleepTime){
   });
 }
 
-function showAllTimesFromArray(array, sleepTime){
+function showAllTimes2(array, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
     var counter = 0;
     array.forEach(function(item, index){
       value = parseInt(item["burst"])
+      for (i=0; i<(value-1); i++){
+        skipTime();
+      }
+      counter = counter + value;
+      showTime(counter);
+    });
+  });
+}
+
+function showAllTimes4(array, sleepTime){
+  sleep(sleepTime).then(() => {
+    showTime(0);
+    var counter = 0;
+    array.forEach(function(item, index){
+      value = parseInt(item)
       for (i=0; i<(value-1); i++){
         skipTime();
       }
