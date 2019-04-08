@@ -264,8 +264,88 @@ function sjfAlgorithm(burstArray){
 
 
 
-function roundRobinAlgorithm(burstHash){
+function roundRobinAlgorithm(burstArray){
   console.log("Starting roundRobinAlgorithm");
+  timeQuantum = parseInt(document.getElementById('inputTimeQuantum').value);
+
+  var array = Array.from(burstArray);
+  var sleepTime = 2000 * sleepDuration;
+
+  var arrayValues = [];
+  array.forEach(function(item, index){
+    arrayValues.push({
+      proc: item.parentElement.previousSibling.innerHTML,
+      burst: parseInt(item.value),
+      color: getRandomColor()
+    });
+  });
+
+  var resultArray = [];
+
+  counter = roundRobinHelper3(arrayValues, timeQuantum) + 1;
+  console.log("BEGIN, COUNTER: ", counter);
+  while (counter > 1){
+    roundRobinHelper1(arrayValues, timeQuantum).forEach(function(item, index){resultArray.push(item)});
+    arrayValues = roundRobinHelper2(arrayValues, timeQuantum);
+    counter -= 1
+  }
+
+  resultArray.forEach(function(item, index){
+    for (i=0; i<item['burst']; i++){
+      sleep(sleepTime).then(() => {
+        showCube(item['proc'], item['color']);
+      });
+      sleepTime = sleepTime + (1000 * sleepDuration);
+    }
+  });
+
+  showAllTimes2(resultArray, sleepTime);
+}
+
+function roundRobinHelper1(array, timeQuantum){
+  resultArr = [];
+  array.forEach(function(item, index){
+    if (item['burst'] > timeQuantum) {
+      resultArr.push({
+        proc: item['proc'],
+        burst: timeQuantum,
+        color: item['color']
+      });
+      console.log(item);
+    }
+    else {
+      resultArr.push({
+        proc: item['proc'],
+        burst: item['burst'],
+        color: item['color']
+      });
+    }
+  });
+  return resultArr
+}
+
+function roundRobinHelper2(array, timeQuantum){
+  var indexes = [];
+  array.forEach(function(item, index){
+    if (item['burst'] > timeQuantum) {
+      array[index]['burst'] -= timeQuantum
+    }
+    else {
+      indexes.push(index);
+    }
+  });
+  indexes.sort().reverse().forEach(function(item, index){array.splice(item,1)});
+  return array
+}
+
+function roundRobinHelper3(array, timeQuantum){
+  var biggestBurst = 0;
+  array.forEach(function(item, index){
+    if (item['burst'] > biggestBurst) {biggestBurst = item['burst']}
+  });
+  console.log(biggestBurst);
+  console.log(biggestBurst / timeQuantum);
+  return biggestBurst / timeQuantum
 }
 
 function priorityAlgorithm(){
