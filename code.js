@@ -123,7 +123,7 @@ function createTable(e){
 // submit.onclick = function(){
 //
 //   var counter = document.getElementById('counter');
-//   var average_time = document.getElementById('average_time');
+//   var averageTime = document.getElementById('average-time');
 //   var FCFS = document.getElementsByClassName('forCount');
 //
 //
@@ -135,7 +135,7 @@ function createTable(e){
 //
 //
 //
-//   average_time.innerHTML = sum/FCFS.length;
+//   averageTime.innerHTML = sum/FCFS.length;
 //
 //   var number = 0;
 //   var interval = setInterval(() =>  {
@@ -192,8 +192,9 @@ function createTable(e){
 
 function startSimulation(e){
   document.getElementById('simulation').style.display = 'block'
-  // $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
+  $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
   burstArray = getProcessArray();
+  displayProcesses(burstArray);
 
   // Change cube width and sleep duration if too many bursts
   burstSum = 0;
@@ -230,6 +231,18 @@ function fcfsAlgorithm(burstArray){
   showAllTimes1(burstArray, sleepTime);
 }
 
+function displayProcesses(burstArray) {
+  burstArray.forEach(function(item, index){
+    text = item.parentElement.previousSibling.innerHTML;
+    value = item.value;
+    info = document.createElement('h3');
+    info.id='process';
+    // cube.setAttribute('style', `background-color: ${color}; width: ${cubeWidth}px`);
+    info.innerHTML = `${text} - ${value} bursts`;
+    document.getElementById('processes').appendChild(info);
+  });
+}
+
 function sjfAlgorithm(burstArray){
   console.log("Starting sjfAlgorithm");
   var processNameArray = [];
@@ -264,8 +277,85 @@ function sjfAlgorithm(burstArray){
 
 
 
-function roundRobinAlgorithm(burstHash){
+function roundRobinAlgorithm(burstArray){
   console.log("Starting roundRobinAlgorithm");
+  timeQuantum = parseInt(document.getElementById('inputTimeQuantum').value);
+
+  var array = Array.from(burstArray);
+  var sleepTime = 2000 * sleepDuration;
+
+  var arrayValues = [];
+  var processes = [];
+  array.forEach(function(item, index){
+    arrayValues.push({
+      proc: item.parentElement.previousSibling.innerHTML,
+      burst: parseInt(item.value),
+      color: getRandomColor()
+    });
+  });
+
+  var resultArray = [];
+
+  counter = roundRobinHelper3(arrayValues, timeQuantum) + 1;
+  processes = arrayValues.slice();
+  while (counter > 1){
+    roundRobinHelper1(arrayValues, timeQuantum).forEach(function(item, index){resultArray.push(item)});
+    arrayValues = roundRobinHelper2(arrayValues, timeQuantum);
+    counter -= 1
+  }
+
+  resultArray.forEach(function(item, index){
+    for (i=0; i<item['burst']; i++){
+      sleep(sleepTime).then(() => {
+        showCube(item['proc'], item['color']);
+      });
+      sleepTime = sleepTime + (1000 * sleepDuration);
+    }
+  });
+  showAllTimes3(processes, resultArray, sleepTime);
+}
+
+function roundRobinHelper1(array, timeQuantum){
+  resultArr = [];
+  array.forEach(function(item, index){
+    if (item['burst'] > timeQuantum) {
+      resultArr.push({
+        proc: item['proc'],
+        burst: timeQuantum,
+        color: item['color']
+      });
+    }
+    else {
+      resultArr.push({
+        proc: item['proc'],
+        burst: item['burst'],
+        color: item['color']
+      });
+    }
+  });
+  return resultArr
+}
+
+function roundRobinHelper2(array, timeQuantum){
+  var indexes = [];
+  array.forEach(function(item, index){
+    if (item['burst'] > timeQuantum) {
+      array[index]['burst'] -= timeQuantum
+    }
+    else {
+      indexes.push(index);
+    }
+  });
+  indexes.sort().reverse().forEach(function(item, index){array.splice(item,1)});
+  return array
+}
+
+function roundRobinHelper3(array, timeQuantum){
+  var biggestBurst = 0;
+  array.forEach(function(item, index){
+    if (item['burst'] > biggestBurst) {biggestBurst = item['burst']}
+  });
+  return biggestBurst / timeQuantum
 }
 
 function priorityAlgorithm(){
@@ -309,7 +399,6 @@ function getProcessBursts(){
   input.forEach(function(item,index){
     burstHash["P"+(index+1)] = item.value;
   });
-  console.log("Process hash:",burstHash);
   return burstHash;
 }
 
@@ -327,7 +416,7 @@ function sleep (time) {
 }
 
 var gap = 0
-var counter = document.getElementById('counter');
+var counterElem = document.getElementById('counter');
 var counterNr = 0
 function showCube(text, color){
 
@@ -341,7 +430,7 @@ function showCube(text, color){
   cube.style.top= posY + 'px';
   document.getElementById('simulation-gantt').appendChild(cube);
   gap = gap + cubeWidth;
-  counter.innerHTML = counterNr+1;
+  counterElem.innerHTML = counterNr+1;
   counterNr++;
 }
 
@@ -363,7 +452,7 @@ function skipTime(){
   gap2 = gap2 + cubeWidth;
 }
 
-var average_time = document.getElementById('average_time');
+var averageTime = document.getElementById('average-time');
 
 function showAllTimes1(burstArray, sleepTime){
   sleep(sleepTime).then(() => {
@@ -377,23 +466,65 @@ function showAllTimes1(burstArray, sleepTime){
       counter = counter + value;
       showTime(counter);
     });
-    average_time.innerHTML=counter/burstArray.length;
+    averageTime.innerHTML=counter/burstArray.length;
   });
 }
 
 function showAllTimes2(array, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
-    var counter = 0;
+    var count = 0;
     array.forEach(function(item, index){
       value = parseInt(item["burst"])
       for (i=0; i<(value-1); i++){
         skipTime();
       }
-      counter = counter + value;
-      showTime(counter);
+      count = count + value;
+      showTime(count);
     });
+    averageTime.innerHTML=count/burstArray.length;
   });
+}
+
+var processesArr = []
+function showAllTimes3(processes, array, sleepTime){
+  processesArr = processes.slice();
+  processesArr.forEach(function(item, index){
+    item['counter'] = 0;
+    console.log(item);
+  });
+
+  sleep(sleepTime).then(() => {
+    showTime(0);
+    var count = 0;
+    array.forEach(function(item, index){
+      value = parseInt(item["burst"])
+      for (i=0; i<(value-1); i++){
+        skipTime();
+      }
+      count = count + value;
+      addCount(item, count);
+      showTime(count);
+    });
+    averageTime.innerHTML = calculateAverageTime();
+  });
+}
+
+function addCount(item, count) {
+  processesArr.forEach(function(proc, index){
+    if (proc['proc'] == item['proc']) {
+      proc['counter'] = count;
+    }
+  });
+}
+
+function calculateAverageTime() {
+  bursts = getProcessArray();
+  var sum = 0;
+  processesArr.forEach(function(item, index){
+    sum += (item['counter'] - bursts[index].value);
+  });
+  return (sum / processesArr.length);
 }
 
 var avtSum = 0;
@@ -410,7 +541,7 @@ function showAllTimes4(array, sleepTime){
       counter = counter + value;
       showTime(counter);
     });
-    average_time.innerHTML=avtSum/array.length;
+    averageTime.innerHTML=avtSum/array.length;
   });
 }
 
