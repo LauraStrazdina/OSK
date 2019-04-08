@@ -407,7 +407,7 @@ function sleep (time) {
 }
 
 var gap = 0
-var counter = document.getElementById('counter');
+var counterElem = document.getElementById('counter');
 var counterNr = 0
 function showCube(text, color){
 
@@ -421,7 +421,7 @@ function showCube(text, color){
   cube.style.top= posY + 'px';
   document.getElementById('simulation-gantt').appendChild(cube);
   gap = gap + cubeWidth;
-  counter.innerHTML = counterNr+1;
+  counterElem.innerHTML = counterNr+1;
   counterNr++;
 }
 
@@ -464,15 +464,16 @@ function showAllTimes1(burstArray, sleepTime){
 function showAllTimes2(array, sleepTime){
   sleep(sleepTime).then(() => {
     showTime(0);
-    var counter = 0;
+    var count = 0;
     array.forEach(function(item, index){
       value = parseInt(item["burst"])
       for (i=0; i<(value-1); i++){
         skipTime();
       }
-      counter = counter + value;
-      showTime(counter);
+      count = count + value;
+      showTime(count);
     });
+    average_time.innerHTML=count/burstArray.length;
   });
 }
 
