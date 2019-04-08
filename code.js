@@ -197,7 +197,7 @@ function startSimulation(e){
   if (chosenAlgorithm == "fcfsAlgorithm"){fcfsAlgorithm(burstArray)}
   else if (chosenAlgorithm == "sjfAlgorithm"){sjfAlgorithm(burstArray)}
   else if (chosenAlgorithm == "roundRobinAlgorithm"){roundRobinAlgorithm(burstHash)}
-  else if (chosenAlgorithm == "priorityAlgorithm"){priorityAlgorithm(burstHash)}
+  else if (chosenAlgorithm == "priorityAlgorithm"){priorityAlgorithm()}
   else {console.log("BAD ALGORITHM:", chosenAlgorithm)}
 }
 
@@ -248,12 +248,52 @@ function sjfAlgorithm(burstArray){
   showAllTimesFromArray(array3, sleepTime);
 }
 
+
+
 function roundRobinAlgorithm(burstHash){
   console.log("Starting roundRobinAlgorithm");
 }
 
-function priorityAlgorithm(burstHash){
+function priorityAlgorithm(){
+
   console.log("Starting priorityAlgorithm");
+  var priorities = document.querySelectorAll('#inputPriority');
+  var prioritiesArray = []
+  sleepTime = 1000;
+
+  priorities.forEach(function(item, index){
+    prioritiesArray.push(item.value);
+  });
+
+  var maxPrioritiesValue = Math.max.apply(null, prioritiesArray);
+  //console.log(maxPrioritiesValue);
+
+// for (i=0; i<maxPrioritiesValue+1; i++){
+//   var sleepTime = 2000
+//   priorities.forEach(function(item, index){
+//     var color = getRandomColor();
+//       if (i==item.value) {
+//         for (x=1; x<=item.parentElement.previousSibling.firstChild.value; x++){
+//           showCube(item.parentElement.previousSibling.previousSibling.innerHTML, color)
+//         }
+//       }
+//     });
+//   };
+for (i= 0; i<maxPrioritiesValue+1; i++){
+priorities.forEach(function(item, index){
+    var color = getRandomColor();
+
+    if (i==item.value){
+      for (x=1; x<=item.parentElement.previousSibling.firstChild.value; x++){
+        sleep(sleepTime).then(() => {
+          showCube(item.parentElement.previousSibling.previousSibling.innerHTML, color)
+        });
+        sleepTime=sleepTime+1000;
+      }
+    }
+  });
+};
+
 }
 
 function getProcessArray(){
@@ -286,6 +326,7 @@ function sleep (time) {
 
 var gap = 0
 function showCube(text, color){
+
   posX = window.scrollX + document.getElementById('simulation-gantt').getBoundingClientRect().left + 4 + gap;
   posY = window.scrollY + document.getElementById('simulation-gantt').getBoundingClientRect().top + 4;
   cube = document.createElement('div');
