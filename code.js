@@ -192,7 +192,7 @@ function createTable(e){
 
 function startSimulation(e){
   document.getElementById('simulation').style.display = 'block'
-  $("body").css("overflow", "hidden"); // this part doesn't allow scrolling
+  //$("body").css("overflow", "hidden"); // this part doesn't allow scrolling
   burstArray = getProcessArray();
   displayProcesses(burstArray);
 
@@ -550,6 +550,11 @@ function getSorted(array){
     return (a["burst"] > b["burst"]) ? 1 : ((b["burst"] > a["burst"]) ? -1 : 0)
   });
   return sorted
+}
+
+document.getElementById('tryAgain').addEventListener('click', refresh);
+function refresh(e){
+  location.reload();
 }
 
 

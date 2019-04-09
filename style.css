@@ -90,7 +90,7 @@ a:link {
     font-size: 1.1em;
 }
 
-#submit{
+#submit, #tryAgain{
   color: white;
   width: 14.5%;
   height: 2.8em;
